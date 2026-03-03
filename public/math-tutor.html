@@ -696,6 +696,41 @@
         console.log('✅ Math Tutor AI loaded!');
         loadFormulas(); // Load initial formulas
         console.log(`📡 API URL: ${API_URL}`);
+
+        // Auto-trigger assessment on page load
+        async function loadAssessment() {
+            const board = boardSelect.value;
+            const classLevel = classSelect.value;
+
+            try {
+                emptyState.classList.add('hidden');
+                loadingState.classList.remove('hidden');
+
+                const response = await fetch(`${API_URL}/assess?board=${encodeURIComponent(board)}&class_level=${classLevel}`);
+                const data = await response.json();
+
+                if (data.assessment_completed) {
+                    // Assessment already done, show empty state
+                    loadingState.classList.add('hidden');
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                // Display assessment as a solution card
+                loadingState.classList.add('hidden');
+                displaySolution(data);
+                
+                // Update the question input placeholder
+                questionInput.placeholder = 'Type your answer to Problem 1 here...';
+
+            } catch (error) {
+                console.error('Failed to load assessment:', error);
+                loadingState.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+            }
+        }
+
+        loadAssessment();
     </script>
 
 </body>

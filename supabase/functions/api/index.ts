@@ -137,7 +137,7 @@ async function callAI(prompt: string): Promise<string> {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'google/gemini-2.5-flash',
+      model: 'google/gemini-3-flash-preview',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
     }),
@@ -485,6 +485,43 @@ Deno.serve(async (req) => {
   const path = url.pathname
 
   try {
+    // Route: /assess - GET to start assessment on page load
+    if (path.endsWith('/assess') && req.method === 'GET') {
+      const board = url.searchParams.get('board') || 'CBSE'
+      const classLevel = parseInt(url.searchParams.get('class_level') || '10')
+      const sessionId = req.headers.get('x-session-id') || url.searchParams.get('session_id') || 'default-session'
+      const session = getSession(sessionId)
+
+      if (session.assessment_completed) {
+        return new Response(JSON.stringify({
+          assessment_completed: true,
+          current_level: session.current_level,
+        }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+      }
+
+      const assessmentQs = getAssessmentQuestions(board, classLevel)
+      if (session.assessment_questions_given === 0) {
+        session.assessment_questions_given = 1
+      }
+
+      return new Response(JSON.stringify({
+        assessment_completed: false,
+        question: 'Level Assessment',
+        steps: [
+          '📊 Your Current Level: ASSESSMENT IN PROGRESS',
+          'Welcome! Before we begin, I need to assess your current level.',
+          'Please solve the following 3 problems and send your answers one by one.',
+          `Problem 1 (Easy): ${assessmentQs[0].question}`,
+          `Problem 2 (Medium): ${assessmentQs[1].question}`,
+          `Problem 3 (Hard): ${assessmentQs[2].question}`,
+          'Type your answer to Problem 1 in the question box and click Solve!',
+        ],
+        solution: 'Please answer the 3 assessment problems to determine your starting level.',
+        confidence: 1.0,
+        source: 'knowledge_base',
+      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    }
+
     // Route: /solve or ends with /solve
     if (path.endsWith('/solve') && req.method === 'POST') {
       return await handleSolve(req)
