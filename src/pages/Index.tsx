@@ -1,11 +1,14 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useEffect } from "react";
 
 const Index = () => {
+  useEffect(() => {
+    window.location.href = "/math-tutor.html";
+  }, []);
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+        <p className="text-xl text-muted-foreground">Loading Math Tutor AI...</p>
       </div>
     </div>
   );
