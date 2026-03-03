@@ -1,34 +1,6 @@
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
-
-// ============================================
-// SESSION STORE (in-memory)
-// ============================================
-const sessions: Record<string, {
-  current_level: 'easy' | 'medium' | 'hard',
-  correct_streak: number,
-  wrong_streak: number,
-  total_questions: number,
-  assessment_completed: boolean,
-  assessment_answers: { difficulty: string, correct: boolean }[],
-  assessment_questions_given: number,
-}> = {}
-
-function getSession(sessionId: string) {
-  if (!sessions[sessionId]) {
-    sessions[sessionId] = {
-      current_level: 'medium',
-      correct_streak: 0,
-      wrong_streak: 0,
-      total_questions: 0,
-      assessment_completed: false,
-      assessment_answers: [],
-      assessment_questions_given: 0,
-    }
-  }
-  return sessions[sessionId]
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-session-id, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 }
 
 // ============================================
@@ -176,9 +148,8 @@ function getLevelDescription(level: string): string {
 // ============================================
 // ASSESSMENT QUESTIONS
 // ============================================
-function getAssessmentQuestions(board: string, classLevel: number): { question: string, difficulty: string, expectedAnswer: string }[] {
-  // Generate contextual assessment questions based on board/class
-  const questions = [
+function getAssessmentQuestions(classLevel: number): { question: string, difficulty: string, expectedAnswer: string }[] {
+  return [
     {
       difficulty: 'easy',
       question: classLevel <= 10
@@ -201,131 +172,56 @@ function getAssessmentQuestions(board: string, classLevel: number): { question: 
       expectedAnswer: classLevel <= 10 ? '24, 26, 28' : '3/2',
     },
   ]
-  return questions
 }
 
 // ============================================
-// SOLVE HANDLER
+// CHECK ANSWER HANDLER (stateless - client sends state)
+// ============================================
+async function handleCheckAnswer(req: Request): Promise<Response> {
+  const body = await req.json()
+  const { answer, problem_index, class_level } = body
+  // problem_index: 0, 1, or 2
+  
+  const classLevel = class_level || 10
+  const assessmentQs = getAssessmentQuestions(classLevel)
+  
+  if (problem_index < 0 || problem_index > 2) {
+    return new Response(JSON.stringify({ error: 'Invalid problem index' }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
+  }
+
+  const currentQ = assessmentQs[problem_index]
+  
+  // Use AI to check if the answer is correct
+  let isCorrect = false
+  try {
+    const checkPrompt = `The student was asked: "${currentQ.question}"
+The expected answer is: "${currentQ.expectedAnswer}"
+The student answered: "${answer}"
+Is the student's answer correct or essentially correct? Reply with only "CORRECT" or "INCORRECT".`
+    const aiResult = await callAI(checkPrompt)
+    isCorrect = aiResult.trim().toUpperCase().includes('CORRECT') && !aiResult.trim().toUpperCase().includes('INCORRECT')
+  } catch {
+    // Fallback: basic string matching
+    isCorrect = answer.toLowerCase().includes(currentQ.expectedAnswer.toLowerCase())
+  }
+
+  return new Response(JSON.stringify({
+    problem_index,
+    correct: isCorrect,
+    difficulty: currentQ.difficulty,
+  }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+}
+
+// ============================================
+// SOLVE HANDLER (stateless - client sends session state)
 // ============================================
 async function handleSolve(req: Request): Promise<Response> {
   const body = await req.json()
-  const { question, board, class_level } = body
+  const { question, board, class_level, current_level } = body
 
-  // Session management via a simple header or generate one
-  const sessionId = req.headers.get('x-session-id') || 'default-session'
-  const session = getSession(sessionId)
-
-  // Check if this is an assessment phase
-  if (!session.assessment_completed) {
-    // If no assessment questions given yet, return the first assessment question
-    if (session.assessment_questions_given === 0) {
-      const assessmentQs = getAssessmentQuestions(board, class_level || 10)
-      session.assessment_questions_given = 1
-
-      // Check if the user's "question" is actually an attempt to answer an assessment
-      // First time: give them the assessment questions
-      const assessmentSteps = [
-        `📊 Your Current Level: ASSESSMENT IN PROGRESS`,
-        `Welcome! Before we begin, I need to assess your current level.`,
-        `Please solve the following 3 problems and send your answers one by one.`,
-        `Problem 1 (Easy): ${assessmentQs[0].question}`,
-        `Problem 2 (Medium): ${assessmentQs[1].question}`,
-        `Problem 3 (Hard): ${assessmentQs[2].question}`,
-        `Type your answer to Problem 1 first!`,
-      ]
-
-      return new Response(JSON.stringify({
-        question: 'Level Assessment',
-        steps: assessmentSteps,
-        solution: 'Please answer the 3 assessment problems to determine your starting level.',
-        confidence: 1.0,
-        source: 'knowledge_base',
-      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
-    }
-
-    // Process assessment answers
-    const assessmentQs = getAssessmentQuestions(board, class_level || 10)
-    const currentQ = session.assessment_questions_given - 1 // 0-indexed
-
-    if (currentQ < 3) {
-      // Use AI to check if the answer is correct
-      const checkPrompt = `The student was asked: "${assessmentQs[currentQ].question}"
-The expected answer is: "${assessmentQs[currentQ].expectedAnswer}"
-The student answered: "${question}"
-Is the student's answer correct or essentially correct? Reply with only "CORRECT" or "INCORRECT".`
-
-      let isCorrect = false
-      try {
-        const aiResult = await callAI(checkPrompt)
-        isCorrect = aiResult.trim().toUpperCase().includes('CORRECT') && !aiResult.trim().toUpperCase().includes('INCORRECT')
-      } catch {
-        // If AI fails, do basic string matching
-        isCorrect = question.toLowerCase().includes(assessmentQs[currentQ].expectedAnswer.toLowerCase())
-      }
-
-      session.assessment_answers.push({ difficulty: assessmentQs[currentQ].difficulty, correct: isCorrect })
-      session.assessment_questions_given++
-
-      if (session.assessment_questions_given <= 3) {
-        // More assessment questions to go
-        const nextQ = session.assessment_questions_given - 1
-        const resultEmoji = isCorrect ? '✅ Correct!' : '❌ Not quite.'
-        return new Response(JSON.stringify({
-          question: `Assessment - Problem ${currentQ + 1} Result`,
-          steps: [
-            `📊 Your Current Level: ASSESSMENT IN PROGRESS`,
-            `${resultEmoji} Your answer to Problem ${currentQ + 1} has been recorded.`,
-            `Now solve Problem ${nextQ + 1} (${assessmentQs[nextQ].difficulty}): ${assessmentQs[nextQ].question}`,
-          ],
-          solution: `Answer Problem ${nextQ + 1} to continue the assessment.`,
-          confidence: 1.0,
-          source: 'knowledge_base',
-        }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
-      }
-
-      // All 3 answered - determine level
-      const resultEmoji = isCorrect ? '✅ Correct!' : '❌ Not quite.'
-      const easyCorrect = session.assessment_answers.find(a => a.difficulty === 'easy')?.correct || false
-      const mediumCorrect = session.assessment_answers.find(a => a.difficulty === 'medium')?.correct || false
-      const hardCorrect = session.assessment_answers.find(a => a.difficulty === 'hard')?.correct || false
-
-      if (hardCorrect && mediumCorrect && easyCorrect) {
-        session.current_level = 'hard'
-      } else if (easyCorrect && mediumCorrect) {
-        session.current_level = 'medium'
-      } else if (easyCorrect) {
-        session.current_level = 'easy'
-      } else {
-        session.current_level = 'easy'
-      }
-
-      session.assessment_completed = true
-      session.correct_streak = 0
-      session.wrong_streak = 0
-
-      return new Response(JSON.stringify({
-        question: 'Assessment Complete!',
-        steps: [
-          `📊 Your Current Level: ${session.current_level.toUpperCase()}`,
-          `${resultEmoji} Your answer to Problem ${currentQ + 1} has been recorded.`,
-          `Assessment Results:`,
-          `Easy: ${easyCorrect ? '✅ Correct' : '❌ Incorrect'}`,
-          `Medium: ${mediumCorrect ? '✅ Correct' : '❌ Incorrect'}`,
-          `Hard: ${hardCorrect ? '✅ Correct' : '❌ Incorrect'}`,
-          `Your starting difficulty has been set to ${session.current_level.toUpperCase()}.`,
-          `You can now ask any math question! I will adapt to your level.`,
-        ],
-        solution: `Starting level: ${session.current_level.toUpperCase()}. Ask your first question!`,
-        confidence: 1.0,
-        source: 'knowledge_base',
-      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
-    }
-  }
-
-  // ============================================
-  // ADAPTIVE SOLVING (post-assessment)
-  // ============================================
-  const level = session.current_level
+  const level = current_level || 'medium'
   const stepRange = getStepRange(level)
   const levelDesc = getLevelDescription(level)
 
@@ -346,7 +242,6 @@ IMPORTANT RULES:
 - Academic and friendly tone
 - Use the board and class level context to tailor the explanation
 - Provide exactly the right number of steps for the difficulty level
-- After the solution, ask: "Would you like a more detailed explanation for this problem?"
 
 Respond in this exact JSON format (no markdown code blocks):
 {
@@ -360,10 +255,8 @@ The confidence should be between 0.7 and 0.98. Use lower confidence if the probl
   try {
     const aiResponse = await callAI(prompt)
 
-    // Parse AI response
     let parsed: { steps: string[], solution: string, confidence: number }
     try {
-      // Try to extract JSON from the response
       const jsonMatch = aiResponse.match(/\{[\s\S]*\}/)
       if (jsonMatch) {
         parsed = JSON.parse(jsonMatch[0])
@@ -371,7 +264,6 @@ The confidence should be between 0.7 and 0.98. Use lower confidence if the probl
         throw new Error('No JSON found')
       }
     } catch {
-      // Fallback if parsing fails
       parsed = {
         steps: [aiResponse],
         solution: aiResponse.substring(0, 200),
@@ -387,23 +279,8 @@ The confidence should be between 0.7 and 0.98. Use lower confidence if the probl
       parsed.steps = parsed.steps.slice(0, stepRange.max)
     }
 
-    // Ensure confidence is in range
     parsed.confidence = Math.max(0.7, Math.min(0.98, parsed.confidence || 0.85))
 
-    // Update session - check if answer seems correct (simplified: we assume AI gives correct answers)
-    // In a real system, you'd verify the student's answer against the AI solution
-    session.total_questions++
-    session.correct_streak++
-    session.wrong_streak = 0
-
-    // Adaptive difficulty adjustment
-    if (session.correct_streak >= 2) {
-      if (session.current_level === 'easy') session.current_level = 'medium'
-      else if (session.current_level === 'medium') session.current_level = 'hard'
-      session.correct_streak = 0
-    }
-
-    // Add level info as first step
     const stepsWithLevel = [
       `📊 Your Current Level: ${level.toUpperCase()}`,
       ...parsed.steps,
@@ -438,7 +315,6 @@ The confidence should be between 0.7 and 0.98. Use lower confidence if the probl
 // FORMULAS HANDLER
 // ============================================
 function handleFormulas(url: URL): Response {
-  // Extract class level from path: /api/formulas/10 or /api/formulas/JEE
   const pathParts = url.pathname.split('/')
   const classLevel = pathParts[pathParts.length - 1] || '10'
 
@@ -474,6 +350,23 @@ function handleFeedback(url: URL): Response {
 }
 
 // ============================================
+// ASSESS HANDLER (returns assessment questions)
+// ============================================
+function handleAssess(url: URL): Response {
+  const classLevel = parseInt(url.searchParams.get('class_level') || '10')
+  const assessmentQs = getAssessmentQuestions(classLevel)
+
+  return new Response(JSON.stringify({
+    assessment_completed: false,
+    questions: assessmentQs.map((q, i) => ({
+      index: i,
+      difficulty: q.difficulty,
+      question: q.question,
+    })),
+  }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+}
+
+// ============================================
 // MAIN ROUTER
 // ============================================
 Deno.serve(async (req) => {
@@ -485,49 +378,22 @@ Deno.serve(async (req) => {
   const path = url.pathname
 
   try {
-    // Route: /assess - GET to start assessment on page load
+    // Route: /assess - GET assessment questions
     if (path.endsWith('/assess') && req.method === 'GET') {
-      const board = url.searchParams.get('board') || 'CBSE'
-      const classLevel = parseInt(url.searchParams.get('class_level') || '10')
-      const sessionId = req.headers.get('x-session-id') || url.searchParams.get('session_id') || 'default-session'
-      const session = getSession(sessionId)
-
-      if (session.assessment_completed) {
-        return new Response(JSON.stringify({
-          assessment_completed: true,
-          current_level: session.current_level,
-        }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
-      }
-
-      const assessmentQs = getAssessmentQuestions(board, classLevel)
-      if (session.assessment_questions_given === 0) {
-        session.assessment_questions_given = 1
-      }
-
-      return new Response(JSON.stringify({
-        assessment_completed: false,
-        question: 'Level Assessment',
-        steps: [
-          '📊 Your Current Level: ASSESSMENT IN PROGRESS',
-          'Welcome! Before we begin, I need to assess your current level.',
-          'Please solve the following 3 problems and send your answers one by one.',
-          `Problem 1 (Easy): ${assessmentQs[0].question}`,
-          `Problem 2 (Medium): ${assessmentQs[1].question}`,
-          `Problem 3 (Hard): ${assessmentQs[2].question}`,
-          'Type your answer to Problem 1 in the question box and click Solve!',
-        ],
-        solution: 'Please answer the 3 assessment problems to determine your starting level.',
-        confidence: 1.0,
-        source: 'knowledge_base',
-      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+      return handleAssess(url)
     }
 
-    // Route: /solve or ends with /solve
+    // Route: /check-answer - POST to check a single assessment answer
+    if (path.endsWith('/check-answer') && req.method === 'POST') {
+      return await handleCheckAnswer(req)
+    }
+
+    // Route: /solve
     if (path.endsWith('/solve') && req.method === 'POST') {
       return await handleSolve(req)
     }
 
-    // Route: /formulas/... 
+    // Route: /formulas/...
     if (path.includes('/formulas')) {
       return handleFormulas(url)
     }

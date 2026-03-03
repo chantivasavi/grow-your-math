@@ -66,16 +66,10 @@
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        /* Feedback Buttons */
         .feedback-btn {
             font-size: 24px;
             background: transparent;
@@ -86,24 +80,10 @@
             transition: all 0.2s ease;
         }
 
-        .dark .feedback-btn {
-            border-color: #374151;
-        }
-
-        .feedback-btn:hover {
-            transform: scale(1.1);
-            border-color: #14b8a5;
-        }
-
-        .feedback-btn.selected {
-            background: #14b8a5;
-            border-color: #14b8a5;
-        }
-
-        .feedback-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .dark .feedback-btn { border-color: #374151; }
+        .feedback-btn:hover { transform: scale(1.1); border-color: #14b8a5; }
+        .feedback-btn.selected { background: #14b8a5; border-color: #14b8a5; }
+        .feedback-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 
@@ -113,8 +93,7 @@
     <div class="flex h-full w-full">
 
         <!-- LEFT SIDEBAR -->
-        <aside
-            class="flex w-80 flex-shrink-0 flex-col gap-6 border-r border-border-light bg-card-light p-6 dark:border-border-dark dark:bg-card-dark overflow-y-auto">
+        <aside class="flex w-80 flex-shrink-0 flex-col gap-6 border-r border-border-light bg-card-light p-6 dark:border-border-dark dark:bg-card-dark overflow-y-auto">
 
             <!-- Header with Bot Icon -->
             <div class="flex items-center gap-3 pb-4 border-b border-border-light dark:border-border-dark">
@@ -123,62 +102,57 @@
                 </div>
                 <div>
                     <h1 class="text-lg font-bold text-text-light-primary dark:text-text-dark-primary">Math Tutor AI</h1>
-                    <p class="text-xs text-text-light-secondary dark:text-text-dark-secondary">Your Smart Learning
-                        Companion</p>
+                    <p class="text-xs text-text-light-secondary dark:text-text-dark-secondary">Your Smart Learning Companion</p>
                 </div>
             </div>
 
             <!-- Input Section -->
             <div class="flex flex-col gap-4">
                 <label class="flex flex-col">
-                    <p class="pb-2 text-base font-medium text-text-light-primary dark:text-text-dark-primary">Ask Your
-                        Question</p>
+                    <p class="pb-2 text-base font-medium text-text-light-primary dark:text-text-dark-primary">Ask Your Question</p>
                     <textarea id="question-input"
                         class="min-h-[120px] w-full resize-none rounded-lg border border-border-light bg-background-light p-3 text-text-light-primary placeholder:text-text-light-secondary focus:border-primary focus:ring-2 focus:ring-primary/20 dark:border-border-dark dark:bg-background-dark dark:text-text-dark-primary"
                         placeholder="Type your math question here... (e.g., Solve 2x + 5 = 13)"></textarea>
                 </label>
 
-
-<!-- Board & Class Selectors -->
-<div class="flex flex-col gap-3">
-    <div class="flex flex-col">
-        <label class="pb-1 text-sm font-medium text-text-light-primary dark:text-text-dark-primary">Board</label>
-        <select id="board-select"
-            class="h-10 w-full rounded-lg border border-border-light bg-background-light pl-3 pr-8 text-text-light-primary focus:border-primary dark:border-border-dark dark:bg-background-dark dark:text-text-dark-primary">
-            <option>CBSE</option>
-            <option>ICSE</option>
-            <option>State Board</option>
-            <option>JEE</option>
-        </select>
-    </div>
-    <div class="flex flex-col" id="class-section">
-        <label class="pb-1 text-sm font-medium text-text-light-primary dark:text-text-dark-primary">Class</label>
-        <select id="class-select"
-            class="h-10 w-full rounded-lg border border-border-light bg-background-light pl-3 pr-8 text-text-light-primary focus:border-primary dark:border-border-dark dark:bg-background-dark dark:text-text-dark-primary">
-            <option>9</option>
-            <option selected>10</option>
-            <option>11</option>
-            <option>12</option>
-        </select>
-    </div>
-    <!-- JEE Subject Dropdown (Hidden by default) -->
-    <div class="flex flex-col" id="jee-subject-section" style="display: none;">
-        <label class="pb-1 text-sm font-medium text-text-light-primary dark:text-text-dark-primary">Subject</label>
-        <select id="jee-subject-select"
-            class="h-10 w-full rounded-lg border border-border-light bg-background-light pl-3 pr-8 text-text-light-primary focus:border-primary dark:border-border-dark dark:bg-background-dark dark:text-text-dark-primary">
-            <option value="">Select Subject</option>
-            <option value="Mathematics">Mathematics</option>
-            <option value="Physics">Physics</option>
-            <option value="Chemistry">Chemistry</option>
-        </select>
-    </div>
-</div>
-
+                <!-- Board & Class Selectors -->
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-col">
+                        <label class="pb-1 text-sm font-medium text-text-light-primary dark:text-text-dark-primary">Board</label>
+                        <select id="board-select"
+                            class="h-10 w-full rounded-lg border border-border-light bg-background-light pl-3 pr-8 text-text-light-primary focus:border-primary dark:border-border-dark dark:bg-background-dark dark:text-text-dark-primary">
+                            <option>CBSE</option>
+                            <option>ICSE</option>
+                            <option>State Board</option>
+                            <option>JEE</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col" id="class-section">
+                        <label class="pb-1 text-sm font-medium text-text-light-primary dark:text-text-dark-primary">Class</label>
+                        <select id="class-select"
+                            class="h-10 w-full rounded-lg border border-border-light bg-background-light pl-3 pr-8 text-text-light-primary focus:border-primary dark:border-border-dark dark:bg-background-dark dark:text-text-dark-primary">
+                            <option>9</option>
+                            <option selected>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col" id="jee-subject-section" style="display: none;">
+                        <label class="pb-1 text-sm font-medium text-text-light-primary dark:text-text-dark-primary">Subject</label>
+                        <select id="jee-subject-select"
+                            class="h-10 w-full rounded-lg border border-border-light bg-background-light pl-3 pr-8 text-text-light-primary focus:border-primary dark:border-border-dark dark:bg-background-dark dark:text-text-dark-primary">
+                            <option value="">Select Subject</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Chemistry">Chemistry</option>
+                        </select>
+                    </div>
+                </div>
 
                 <!-- Solve Button -->
                 <button id="solve-btn"
                     class="h-10 w-full cursor-pointer rounded-lg bg-primary px-4 text-base font-bold text-white shadow-sm transition-all hover:shadow-lg hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed">
-                    <span>Solve Problem</span>
+                    <span id="solve-btn-text">Check Answer</span>
                 </button>
             </div>
 
@@ -188,9 +162,7 @@
                     <span class="text-sm text-text-light-secondary dark:text-text-dark-secondary">Dark Mode</span>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input id="dark-mode-toggle" type="checkbox" class="sr-only peer" />
-                        <div
-                            class="w-9 h-5 bg-border-light rounded-full peer dark:bg-border-dark peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary">
-                        </div>
+                        <div class="w-9 h-5 bg-border-light rounded-full peer dark:bg-border-dark peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
                     </label>
                 </div>
             </div>
@@ -198,58 +170,38 @@
 
         <!-- MAIN CONTENT -->
         <main class="flex min-w-0 flex-1 flex-col overflow-hidden">
-
-            <!-- Top Header -->
-            <header
-                class="flex h-16 w-full flex-shrink-0 items-center justify-between border-b border-border-light bg-card-light px-6 dark:border-border-dark dark:bg-card-dark">
+            <header class="flex h-16 w-full flex-shrink-0 items-center justify-between border-b border-border-light bg-card-light px-6 dark:border-border-dark dark:bg-card-dark">
                 <h2 class="text-xl font-bold text-text-light-primary dark:text-text-dark-primary">Solution</h2>
                 <div class="flex items-center gap-4">
-                    <span class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Ready to
-                        help! 🚀</span>
+                    <span class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Ready to help! 🚀</span>
                 </div>
             </header>
 
-            <!-- Solution Display Area -->
             <div id="solution-container" class="flex-1 overflow-y-auto p-8 max-w-4xl mx-auto w-full">
-
-                <!-- Empty State -->
                 <div id="empty-state" class="flex flex-col items-center justify-center h-full gap-4">
                     <div class="flex size-20 items-center justify-center rounded-full bg-primary/10">
                         <span class="material-symbols-outlined text-5xl text-primary">lightbulb</span>
                     </div>
-                    <h3 class="text-xl font-bold text-text-light-primary dark:text-text-dark-primary">Ask me anything!
-                    </h3>
+                    <h3 class="text-xl font-bold text-text-light-primary dark:text-text-dark-primary">Ask me anything!</h3>
                     <p class="text-center text-text-light-secondary dark:text-text-dark-secondary max-w-md">
                         Type your math question in the sidebar and I'll provide a detailed step-by-step solution.
                     </p>
                 </div>
 
-                <!-- Loading State -->
                 <div id="loading-state" class="hidden flex flex-col items-center justify-center h-full gap-4">
                     <div id="loading-spinner"></div>
                     <p class="text-text-light-secondary dark:text-text-dark-secondary">Solving your problem...</p>
                 </div>
 
-                <!-- Solution Card (Hidden by default) -->
-                <div id="solution-card"
-                    class="hidden flex flex-col gap-8 bg-card-light dark:bg-card-dark rounded-xl p-8 border border-border-light dark:border-border-dark shadow-lg">
-                    <!-- Question Display -->
+                <div id="solution-card" class="hidden flex flex-col gap-8 bg-card-light dark:bg-card-dark rounded-xl p-8 border border-border-light dark:border-border-dark shadow-lg">
                     <div class="prose max-w-none">
-                        <p class="text-lg text-text-light-primary dark:text-text-dark-primary" id="question-display">
-                        </p>
+                        <p class="text-lg text-text-light-primary dark:text-text-dark-primary" id="question-display"></p>
                     </div>
-
-                    <!-- Steps Container -->
                     <div id="steps-container" class="flex flex-col gap-5"></div>
-
-                    <!-- Final Answer -->
                     <div id="answer-section"></div>
-
-                    <!-- Metadata -->
                     <hr class="border-border-light dark:border-border-dark" />
                     <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div
-                            class="flex items-center gap-4 text-sm text-text-light-secondary dark:text-text-dark-secondary">
+                        <div class="flex items-center gap-4 text-sm text-text-light-secondary dark:text-text-dark-secondary">
                             <div class="flex items-center gap-2">
                                 <span class="material-symbols-outlined" id="source-icon">menu_book</span>
                                 <span id="source-text">Knowledge Base</span>
@@ -257,34 +209,22 @@
                             <div class="hidden sm:block h-4 w-px bg-border-light dark:bg-border-dark"></div>
                             <div class="flex items-center gap-2">
                                 <span>Confidence:</span>
-                                <span class="font-semibold text-text-light-primary dark:text-text-dark-primary"
-                                    id="confidence-score">--</span>
+                                <span class="font-semibold text-text-light-primary dark:text-text-dark-primary" id="confidence-score">--</span>
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button id="speak-btn"
-                                class="flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-primary/10 dark:hover:bg-primary/20">
-                                <span
-                                    class="material-symbols-outlined text-xl text-text-light-secondary dark:text-text-dark-secondary">volume_up</span>
+                            <button id="speak-btn" class="flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-primary/10 dark:hover:bg-primary/20">
+                                <span class="material-symbols-outlined text-xl text-text-light-secondary dark:text-text-dark-secondary">volume_up</span>
                             </button>
-                            <button id="copy-btn"
-                                class="flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-primary/10 dark:hover:bg-primary/20">
-                                <span
-                                    class="material-symbols-outlined text-xl text-text-light-secondary dark:text-text-dark-secondary">content_copy</span>
+                            <button id="copy-btn" class="flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-primary/10 dark:hover:bg-primary/20">
+                                <span class="material-symbols-outlined text-xl text-text-light-secondary dark:text-text-dark-secondary">content_copy</span>
                             </button>
                         </div>
                     </div>
-
-                    <!-- Feedback Buttons -->
-                    <div id="feedback-section"
-                        class="mt-4 flex items-center gap-3 border-t border-border-light dark:border-border-dark pt-4"
-                        style="display: none;">
-                        <span class="text-sm text-text-light-secondary dark:text-text-dark-secondary">Was this
-                            helpful?</span>
-                        <button id="thumbs-up" class="feedback-btn" onclick="submitFeedback('positive')"
-                            title="Helpful">👍</button>
-                        <button id="thumbs-down" class="feedback-btn" onclick="submitFeedback('negative')"
-                            title="Not Helpful">👎</button>
+                    <div id="feedback-section" class="mt-4 flex items-center gap-3 border-t border-border-light dark:border-border-dark pt-4" style="display: none;">
+                        <span class="text-sm text-text-light-secondary dark:text-text-dark-secondary">Was this helpful?</span>
+                        <button id="thumbs-up" class="feedback-btn" onclick="submitFeedback('positive')" title="Helpful">👍</button>
+                        <button id="thumbs-down" class="feedback-btn" onclick="submitFeedback('negative')" title="Not Helpful">👎</button>
                         <span id="feedback-message" class="text-sm font-semibold" style="display: none;"></span>
                     </div>
                 </div>
@@ -292,8 +232,7 @@
         </main>
 
         <!-- RIGHT SIDEBAR -->
-        <aside
-            class="flex w-72 flex-shrink-0 flex-col gap-6 border-l border-border-light bg-card-light p-6 dark:border-border-dark dark:bg-card-dark overflow-y-auto">
+        <aside class="flex w-72 flex-shrink-0 flex-col gap-6 border-l border-border-light bg-card-light p-6 dark:border-border-dark dark:bg-card-dark overflow-y-auto">
             <h3 class="text-lg font-bold text-text-light-primary dark:text-text-dark-primary">Recent Problems</h3>
             <ul id="history-list" class="flex flex-col gap-3">
                 <li class="text-sm text-text-light-secondary dark:text-text-dark-secondary italic">No history yet</li>
@@ -309,82 +248,158 @@
     </div>
 
     <script>
-        // ============================================
-        // CONFIGURATION
-        // ============================================
         const API_URL = 'https://gjecnifpdeysplaajvys.supabase.co/functions/v1/api';
         let currentSolution = null;
         let questionHistory = [];
-        let uploadedFile = null;
 
-        // ============================================
-        // DOM ELEMENTS
-        // ============================================
+        // Client-side session state
+        let session = {
+            assessmentCompleted: false,
+            assessmentQuestions: [],
+            assessmentAnswers: [],
+            currentProblem: 0,
+            currentLevel: 'medium',
+            correctStreak: 0,
+            wrongStreak: 0,
+            totalQuestions: 0,
+        };
+
         const questionInput = document.getElementById('question-input');
         const boardSelect = document.getElementById('board-select');
         const classSelect = document.getElementById('class-select');
         const formulasList = document.getElementById('formulas-list');
         const solveBtn = document.getElementById('solve-btn');
-        const fileUpload = document.getElementById('file-upload');
-        const fileLabel = document.getElementById('file-label');
         const darkModeToggle = document.getElementById('dark-mode-toggle');
-
         const emptyState = document.getElementById('empty-state');
         const loadingState = document.getElementById('loading-state');
         const solutionCard = document.getElementById('solution-card');
-
         const questionDisplay = document.getElementById('question-display');
         const stepsContainer = document.getElementById('steps-container');
         const answerSection = document.getElementById('answer-section');
         const sourceIcon = document.getElementById('source-icon');
         const sourceText = document.getElementById('source-text');
         const confidenceScore = document.getElementById('confidence-score');
-
         const speakBtn = document.getElementById('speak-btn');
         const copyBtn = document.getElementById('copy-btn');
         const historyList = document.getElementById('history-list');
 
-        // ============================================
-        // EVENT LISTENERS
-        // ============================================
-        solveBtn.addEventListener('click', solveProblem);
+        solveBtn.addEventListener('click', handleMainAction);
         classSelect.addEventListener('change', loadFormulas);
         boardSelect.addEventListener('change', handleBoardChange);
-            const jeeSubjectSelect = document.getElementById('jee-subject-select');
-            if (jeeSubjectSelect) {
-                jeeSubjectSelect.addEventListener('change', loadJEEFormulas);
-            }
-
-        darkModeToggle.addEventListener('click', toggleDarkMode);
+        const jeeSubjectSelect = document.getElementById('jee-subject-select');
+        if (jeeSubjectSelect) jeeSubjectSelect.addEventListener('change', loadJEEFormulas);
+        darkModeToggle.addEventListener('click', () => document.documentElement.classList.toggle('dark'));
         speakBtn.addEventListener('click', speakSolution);
         copyBtn.addEventListener('click', copySolution);
-        if (fileUpload) fileUpload.addEventListener('change', handleFileUpload);
 
         // ============================================
-        // FILE UPLOAD HANDLER
+        // MAIN ACTION HANDLER
         // ============================================
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                uploadedFile = file;
-                fileLabel.textContent = file.name;
-                console.log('✅ File uploaded:', file.name);
+        async function handleMainAction() {
+            if (!session.assessmentCompleted) {
+                await checkAssessmentAnswer();
+            } else {
+                await solveProblem();
             }
         }
 
         // ============================================
-        // MAIN FUNCTIONS
+        // ASSESSMENT FLOW (client-side state)
         // ============================================
+        async function checkAssessmentAnswer() {
+            const answer = questionInput.value.trim();
+            if (!answer) { alert('Please enter your answer!'); return; }
 
+            emptyState.classList.add('hidden');
+            solutionCard.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+            solveBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/check-answer`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        answer: answer,
+                        problem_index: session.currentProblem,
+                        class_level: parseInt(classSelect.value),
+                    })
+                });
+
+                const data = await response.json();
+                const isCorrect = data.correct;
+                const difficulty = data.difficulty;
+
+                session.assessmentAnswers.push({ difficulty, correct: isCorrect });
+                const resultEmoji = isCorrect ? '✅ Correct!' : '❌ Not quite.';
+                const problemNum = session.currentProblem + 1;
+                session.currentProblem++;
+                questionInput.value = '';
+
+                if (session.currentProblem < 3) {
+                    const nextQ = session.assessmentQuestions[session.currentProblem];
+                    displaySolution({
+                        question: `Assessment - Problem ${problemNum} Result`,
+                        steps: [
+                            '📊 Your Current Level: ASSESSMENT IN PROGRESS',
+                            `${resultEmoji} Your answer to Problem ${problemNum} (${difficulty}) has been recorded.`,
+                            `Now solve Problem ${session.currentProblem + 1} (${nextQ.difficulty}):`,
+                            nextQ.question,
+                        ],
+                        solution: `Answer Problem ${session.currentProblem + 1} to continue.`,
+                        confidence: 1.0,
+                        source: 'knowledge_base',
+                    });
+                    questionInput.placeholder = `Type your answer to Problem ${session.currentProblem + 1} here...`;
+                } else {
+                    // Determine level
+                    const easyOk = session.assessmentAnswers.find(a => a.difficulty === 'easy')?.correct || false;
+                    const medOk = session.assessmentAnswers.find(a => a.difficulty === 'medium')?.correct || false;
+                    const hardOk = session.assessmentAnswers.find(a => a.difficulty === 'hard')?.correct || false;
+
+                    if (hardOk && medOk && easyOk) session.currentLevel = 'hard';
+                    else if (easyOk && medOk) session.currentLevel = 'medium';
+                    else session.currentLevel = 'easy';
+
+                    session.assessmentCompleted = true;
+
+                    displaySolution({
+                        question: 'Assessment Complete!',
+                        steps: [
+                            `📊 Your Starting Level: ${session.currentLevel.toUpperCase()}`,
+                            `${resultEmoji} Your answer to Problem ${problemNum} has been recorded.`,
+                            'Assessment Results:',
+                            `Easy: ${easyOk ? '✅ Correct' : '❌ Incorrect'}`,
+                            `Medium: ${medOk ? '✅ Correct' : '❌ Incorrect'}`,
+                            `Hard: ${hardOk ? '✅ Correct' : '❌ Incorrect'}`,
+                            `Your starting difficulty: ${session.currentLevel.toUpperCase()}.`,
+                            'You can now ask any math question! I will adapt to your level.',
+                        ],
+                        solution: `Starting level: ${session.currentLevel.toUpperCase()}. Ask your first question!`,
+                        confidence: 1.0,
+                        source: 'knowledge_base',
+                    });
+
+                    document.getElementById('solve-btn-text').textContent = 'Solve Problem';
+                    questionInput.placeholder = 'Type your math question here... (e.g., Solve 2x + 5 = 13)';
+                }
+            } catch (error) {
+                console.error('Error checking answer:', error);
+                alert('Failed to check answer. Please try again.');
+                emptyState.classList.remove('hidden');
+            } finally {
+                loadingState.classList.add('hidden');
+                solveBtn.disabled = false;
+            }
+        }
+
+        // ============================================
+        // SOLVE PROBLEM (post-assessment)
+        // ============================================
         async function solveProblem() {
             const question = questionInput.value.trim();
+            if (!question) { alert('Please enter a question!'); return; }
 
-            if (!question) {
-                alert('Please enter a question!');
-                return;
-            }
-
-            // Show loading state
             emptyState.classList.add('hidden');
             solutionCard.classList.add('hidden');
             loadingState.classList.remove('hidden');
@@ -393,29 +408,23 @@
             try {
                 const response = await fetch(`${API_URL}/solve`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         question: question,
                         board: boardSelect.value,
-                        class_level: parseInt(classSelect.value)
+                        class_level: parseInt(classSelect.value),
+                        current_level: session.currentLevel,
                     })
                 });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
                 currentSolution = data;
-
                 displaySolution(data);
                 addToHistory(question);
-
+                session.totalQuestions++;
             } catch (error) {
                 console.error('Error:', error);
-                alert('Failed to solve problem. Make sure the backend is running on http://localhost:8000');
+                alert('Failed to solve problem. Please try again.');
                 emptyState.classList.remove('hidden');
             } finally {
                 loadingState.classList.add('hidden');
@@ -424,50 +433,36 @@
         }
 
         function displaySolution(data) {
-            // Hide loading, show solution
+            currentSolution = data;
             loadingState.classList.add('hidden');
             solutionCard.classList.remove('hidden');
-
-            // Display question
             questionDisplay.textContent = data.question;
 
-            // Display steps
             stepsContainer.innerHTML = '';
             data.steps.forEach((step, index) => {
                 const stepDiv = document.createElement('div');
                 stepDiv.className = 'flex items-start gap-4';
                 stepDiv.innerHTML = `
-            <div class="flex size-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">${index + 1}</div>
-            <p class="mt-1 text-text-light-primary dark:text-text-dark-primary">${step}</p>
-        `;
+                    <div class="flex size-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">${index + 1}</div>
+                    <p class="mt-1 text-text-light-primary dark:text-text-dark-primary">${step}</p>
+                `;
                 stepsContainer.appendChild(stepDiv);
             });
 
-            // Display final answer
             answerSection.innerHTML = `
-        <p class="mb-2 text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Final Answer:</p>
-        <div class="inline-flex items-center gap-2 rounded-lg bg-success/10 px-4 py-2 text-lg font-bold text-success dark:bg-success/20">
-            <span class="material-symbols-outlined text-xl">check_circle</span>
-            <span>${data.solution}</span>
-        </div>
-    `;
+                <p class="mb-2 text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Final Answer:</p>
+                <div class="inline-flex items-center gap-2 rounded-lg bg-success/10 px-4 py-2 text-lg font-bold text-success dark:bg-success/20">
+                    <span class="material-symbols-outlined text-xl">check_circle</span>
+                    <span>${data.solution}</span>
+                </div>
+            `;
 
-            // Update metadata
-            if (data.source === 'knowledge_base') {
-                sourceIcon.textContent = 'menu_book';
-                sourceText.textContent = 'Knowledge Base';
-            } else {
-                sourceIcon.textContent = 'psychology';
-                sourceText.textContent = 'AI Generated';
-            }
-
+            sourceIcon.textContent = data.source === 'knowledge_base' ? 'menu_book' : 'psychology';
+            sourceText.textContent = data.source === 'knowledge_base' ? 'Knowledge Base' : 'AI Generated';
             confidenceScore.textContent = `${Math.round(data.confidence * 100)}%`;
 
-            // Show feedback buttons
             const feedbackSection = document.getElementById('feedback-section');
             feedbackSection.style.display = 'flex';
-
-            // Reset feedback buttons
             document.getElementById('thumbs-up').disabled = false;
             document.getElementById('thumbs-down').disabled = false;
             document.getElementById('thumbs-up').classList.remove('selected');
@@ -478,212 +473,96 @@
         function addToHistory(question) {
             questionHistory.unshift(question);
             if (questionHistory.length > 5) questionHistory.pop();
-
             historyList.innerHTML = '';
             questionHistory.forEach(q => {
                 const li = document.createElement('li');
                 li.className = 'rounded-lg bg-background-light p-3 text-sm text-text-light-primary dark:bg-background-dark dark:text-text-dark-primary hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer';
                 li.textContent = q.length > 50 ? q.substring(0, 50) + '...' : q;
-                li.onclick = () => {
-                    questionInput.value = q;
-                    solveProblem();
-                };
+                li.onclick = () => { questionInput.value = q; solveProblem(); };
                 historyList.appendChild(li);
             });
         }
 
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-        }
-    function speakSolution() {
+        function speakSolution() {
             if (!currentSolution) return;
-
-            // Stop any ongoing speech
             speechSynthesis.cancel();
-
-            const text = `The answer is: ${currentSolution.solution}`;
-            const utterance = new SpeechSynthesisUtterance(text);
-
-            // Get available voices and select a better one
-            const voices = speechSynthesis.getVoices();
-
-            // Try to find these voices (in order of preference)
-            const preferredVoices = [
-           // Good fallback
-                'Samantha',                // Mac female voice
-                'Microsoft Zira Desktop',  // Windows female voice
-            ];
-
-            let selectedVoice = null;
-            for (let prefName of preferredVoices) {
-                selectedVoice = voices.find(voice => voice.name.includes(prefName));
-                if (selectedVoice) break;
-            }
-
-            // Use the best available voice
-            if (selectedVoice) {
-                utterance.voice = selectedVoice;
-            }
-
-            // Fine-tune speech parameters for naturalness
-            utterance.lang = 'en-IN';
-            utterance.rate = 0.95;    // Slightly slower = more natural
-            utterance.pitch = 1.0;    // Normal pitch
-            utterance.volume = 1.0;   // Full volume
-
+            const utterance = new SpeechSynthesisUtterance(`The answer is: ${currentSolution.solution}`);
+            utterance.lang = 'en-IN'; utterance.rate = 0.95;
             speechSynthesis.speak(utterance);
         }
 
         function copySolution() {
             if (!currentSolution) return;
-
             const text = `Question: ${currentSolution.question}\n\nSolution: ${currentSolution.solution}\n\nSteps:\n${currentSolution.steps.join('\n')}`;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Solution copied to clipboard!');
-            });
+            navigator.clipboard.writeText(text).then(() => alert('Solution copied to clipboard!'));
         }
-        // ============================================
-            // JEE DROPDOWN HANDLER
-            // ============================================
-            function handleBoardChange() {
-                const board = boardSelect.value;
-                const classSection = document.getElementById('class-section');
-                const jeeSubjectSection = document.getElementById('jee-subject-section');
 
-                if (board === 'JEE') {
-                    // Show JEE subject dropdown, hide class dropdown
-                    classSection.style.display = 'none';
-                    jeeSubjectSection.style.display = 'block';
-                } else {
-                    // Show class dropdown, hide JEE subject dropdown
-                    classSection.style.display = 'block';
-                    jeeSubjectSection.style.display = 'none';
-                    loadFormulas(); // Load formulas for selected class
+        function handleBoardChange() {
+            const board = boardSelect.value;
+            document.getElementById('class-section').style.display = board === 'JEE' ? 'none' : 'block';
+            document.getElementById('jee-subject-section').style.display = board === 'JEE' ? 'block' : 'none';
+            if (board !== 'JEE') loadFormulas();
+        }
+
+        async function loadJEEFormulas() {
+            const jeeSubject = document.getElementById('jee-subject-select').value;
+            if (!jeeSubject) return;
+            try {
+                const response = await fetch(`${API_URL}/formulas/JEE`);
+                const data = await response.json();
+                if (data.error) return;
+                formulasList.innerHTML = '';
+                const formulas = data.formulas[jeeSubject];
+                if (!formulas || formulas.length === 0) {
+                    formulasList.innerHTML = '<li class="text-sm text-text-light-secondary italic">No formulas</li>';
+                    return;
                 }
-            }
+                formulas.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'rounded-lg bg-background-light p-3 dark:bg-background-dark';
+                    li.innerHTML = `<span class="formula">${item.formula}</span><div class="text-xs text-text-light-secondary dark:text-text-dark-secondary mt-1">${item.name}</div>`;
+                    formulasList.appendChild(li);
+                });
+            } catch (error) { console.error('Failed to load JEE formulas:', error); }
+        }
 
-            async function loadJEEFormulas() {
-                const jeeSubject = document.getElementById('jee-subject-select').value;
-
-                if (!jeeSubject) return;
-
-                try {
-                    const response = await fetch(`${API_URL}/formulas/JEE`);
-                    const data = await response.json();
-
-                    if (data.error) {
-                        console.error('Error loading JEE formulas:', data.error);
-                        return;
-                    }
-
-                    // Clear current formulas
-                    formulasList.innerHTML = '';
-
-                    // Get formulas for selected subject
-                    const formulas = data.formulas[jeeSubject];
-
-                    if (!formulas || formulas.length === 0) {
-                        formulasList.innerHTML = '<li class="text-sm text-text-light-secondary dark:text-text-dark-secondary italic">No formulas available</li>';
-                        return;
-                    }
-
-                    // Display formulas
-                    formulas.forEach(item => {
-                        const li = document.createElement('li');
-                        li.className = 'rounded-lg bg-background-light p-3 dark:bg-background-dark';
-                        li.innerHTML = `
-                <span class="formula">${item.formula}</span>
-                <div class="text-xs text-text-light-secondary dark:text-text-dark-secondary mt-1">${item.name}</div>
-            `;
-                        formulasList.appendChild(li);
-                    });
-
-                    console.log(`✅ Loaded JEE ${jeeSubject} formulas`);
-
-                } catch (error) {
-                    console.error('Failed to load JEE formulas:', error);
-                }
-            }
-
-
-        // ============================================
-        // FORMULA FUNCTIONS
-        // ============================================
         async function loadFormulas() {
             const classLevel = classSelect.value;
-
             try {
                 const response = await fetch(`${API_URL}/formulas/${classLevel}`);
                 const data = await response.json();
-
-                if (data.error) {
-                    console.error('Error loading formulas:', data.error);
-                    return;
-                }
-
-                // Clear current formulas
+                if (data.error) return;
                 formulasList.innerHTML = '';
-
-                // Display formulas by category
-                const formulas = data.formulas;
-                for (const [category, items] of Object.entries(formulas)) {
+                for (const [category, items] of Object.entries(data.formulas)) {
                     items.forEach(item => {
                         const li = document.createElement('li');
                         li.className = 'rounded-lg bg-background-light p-3 dark:bg-background-dark';
                         li.innerHTML = `
-                    <div class="text-xs font-semibold text-text-light-secondary dark:text-text-dark-secondary mb-1">${category}</div>
-                    <span class="formula">${item.formula}</span>
-                    <div class="text-xs text-text-light-secondary dark:text-text-dark-secondary mt-1">${item.name}</div>
-                `;
+                            <div class="text-xs font-semibold text-text-light-secondary dark:text-text-dark-secondary mb-1">${category}</div>
+                            <span class="formula">${item.formula}</span>
+                            <div class="text-xs text-text-light-secondary dark:text-text-dark-secondary mt-1">${item.name}</div>
+                        `;
                         formulasList.appendChild(li);
                     });
                 }
-
-                console.log(`✅ Loaded formulas for Class ${classLevel}`);
-
-            } catch (error) {
-                console.error('Failed to load formulas:', error);
-            }
+            } catch (error) { console.error('Failed to load formulas:', error); }
         }
 
-        // ============================================
-        // FEEDBACK FUNCTIONS
-        // ============================================
         async function submitFeedback(rating) {
             if (!currentSolution) return;
-
             const feedbackMessage = document.getElementById('feedback-message');
             const thumbsUp = document.getElementById('thumbs-up');
             const thumbsDown = document.getElementById('thumbs-down');
-
             try {
-                const response = await fetch(`${API_URL}/feedback?question=${encodeURIComponent(currentSolution.question)}&rating=${rating}&solution=${encodeURIComponent(currentSolution.solution)}&confidence=${currentSolution.confidence}`, {
-                    method: 'POST'
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    // Show success message
-                    feedbackMessage.textContent = '✓ Thanks for your feedback!';
-                    feedbackMessage.style.display = 'inline';
-                    feedbackMessage.style.color = '#10b981';
-
-                    // Disable buttons
-                    thumbsUp.disabled = true;
-                    thumbsDown.disabled = true;
-
-                    // Add selected class
-                    if (rating === 'positive') {
-                        thumbsUp.classList.add('selected');
-                    } else {
-                        thumbsDown.classList.add('selected');
-                    }
-
-                    console.log('✅ Feedback submitted:', rating);
-                }
+                await fetch(`${API_URL}/feedback?question=${encodeURIComponent(currentSolution.question)}&rating=${rating}&solution=${encodeURIComponent(currentSolution.solution)}&confidence=${currentSolution.confidence}`, { method: 'POST' });
+                feedbackMessage.textContent = '✓ Thanks for your feedback!';
+                feedbackMessage.style.display = 'inline';
+                feedbackMessage.style.color = '#10b981';
+                thumbsUp.disabled = true;
+                thumbsDown.disabled = true;
+                if (rating === 'positive') thumbsUp.classList.add('selected');
+                else thumbsDown.classList.add('selected');
             } catch (error) {
-                console.error('Failed to submit feedback:', error);
                 feedbackMessage.textContent = '✗ Failed to submit';
                 feedbackMessage.style.display = 'inline';
                 feedbackMessage.style.color = '#ef4444';
@@ -691,46 +570,48 @@
         }
 
         // ============================================
-        // INITIALIZATION
+        // INITIALIZATION - Load assessment on page load
         // ============================================
-        console.log('✅ Math Tutor AI loaded!');
-        loadFormulas(); // Load initial formulas
-        console.log(`📡 API URL: ${API_URL}`);
+        loadFormulas();
 
-        // Auto-trigger assessment on page load
-        async function loadAssessment() {
-            const board = boardSelect.value;
-            const classLevel = classSelect.value;
-
+        (async function loadAssessment() {
             try {
                 emptyState.classList.add('hidden');
                 loadingState.classList.remove('hidden');
 
-                const response = await fetch(`${API_URL}/assess?board=${encodeURIComponent(board)}&class_level=${classLevel}`);
+                const response = await fetch(`${API_URL}/assess?class_level=${classSelect.value}`);
                 const data = await response.json();
 
-                if (data.assessment_completed) {
-                    // Assessment already done, show empty state
-                    loadingState.classList.add('hidden');
-                    emptyState.classList.remove('hidden');
-                    return;
-                }
+                session.assessmentQuestions = data.questions;
+                session.currentProblem = 0;
+                session.assessmentCompleted = false;
 
-                // Display assessment as a solution card
                 loadingState.classList.add('hidden');
-                displaySolution(data);
-                
-                // Update the question input placeholder
+                displaySolution({
+                    question: 'Level Assessment',
+                    steps: [
+                        '📊 Your Current Level: ASSESSMENT IN PROGRESS',
+                        'Welcome! Before we begin, I need to assess your current level.',
+                        'Please solve the following 3 problems one by one.',
+                        `Problem 1 (Easy): ${data.questions[0].question}`,
+                        `Problem 2 (Medium): ${data.questions[1].question}`,
+                        `Problem 3 (Hard): ${data.questions[2].question}`,
+                        'Type your answer to Problem 1 in the box and click "Check Answer"!',
+                    ],
+                    solution: 'Please answer the 3 assessment problems to determine your starting level.',
+                    confidence: 1.0,
+                    source: 'knowledge_base',
+                });
+
                 questionInput.placeholder = 'Type your answer to Problem 1 here...';
+                document.getElementById('solve-btn-text').textContent = 'Check Answer';
 
             } catch (error) {
                 console.error('Failed to load assessment:', error);
                 loadingState.classList.add('hidden');
                 emptyState.classList.remove('hidden');
             }
-        }
-
-        loadAssessment();
+        })();
     </script>
 
 </body>
